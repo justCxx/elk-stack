@@ -1,0 +1,15 @@
+- name: add apt key
+  apt_key: url={{ es_apt_key_url }} state=present
+  become: yes
+
+- name: add repository
+  apt_repository: repo="{{ es_repositoty }}" state=present
+  become: yes
+
+- name: install
+  apt: name=elasticsearch state=present
+  become: yes
+  notify:
+    - restart elasticsearch
+
+- meta: flush_handlers

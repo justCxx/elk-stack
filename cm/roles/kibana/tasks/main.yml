@@ -1,0 +1,14 @@
+- name: download
+  get_url:
+    url: "https://download.elastic.co/kibana/kibana/kibana-4.3.0-linux-x64.tar.gz"
+    dest: "/tmp"
+
+- file: path=/opt/kibana/ state=directory
+  become: yes
+
+- unarchive:
+    src: "/tmp/kibana-4.3.0-linux-x64.tar.gz"
+    dest: "/opt/kibana/"
+    copy: no
+  become: yes
+

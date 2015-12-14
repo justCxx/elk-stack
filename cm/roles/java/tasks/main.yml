@@ -1,0 +1,25 @@
+- name: add repository
+  apt_repository: repo={{ java_ppa }} state=present
+  become: yes
+
+- name: accept licence
+  debconf:
+    name: "{{ java_package_name }}"
+    question: "shared/accepted-oracle-license-v1-1"
+    value: "true"
+    vtype: "select"
+  become: yes
+
+- name: install
+  apt: name="{{ java_package_name }}" state=present
+  become: yes
+
+- name: set as default
+  apt: name="oracle-java{{ java_version}}-set-default"
+  when: java_set_default
+  become: yes
+
+- name: install ca-certificates
+  apt: name=ca-certificates
+  when: install_ca_certificates
+  become: yes

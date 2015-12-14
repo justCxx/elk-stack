@@ -1,0 +1,21 @@
+- name: add apt key
+  apt_key: url={{ logstash_apt_key_url }} state=present
+  become: yes
+
+- name: add repository
+  apt_repository: repo="{{ logstash_repositoty }}" state=present
+  become: yes
+
+- name: install
+  apt: name=logstash state=present
+  notify:
+    - restart logstash
+  become: yes
+
+- file: path=/etc/pki/tls/certs state=directory
+  become: yes
+
+- file: path=/etc/pki/tls/private state=directory
+  become: yes
+
+- meta: flush_handlers
